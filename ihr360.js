@@ -58,7 +58,7 @@ try {
             }
         }
         if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
-            let body=JSON.stringify($request.body);
+            let body=$request.body;
             $.write(body,bodyName);
             $.log('获取打卡body：\n'+body);
             $.notify("i人事", "获取打卡Body成功", body, { "media-url": img });
