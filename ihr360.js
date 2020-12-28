@@ -1,14 +1,15 @@
 /*
 QX
 重写设置：
-^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header ihr360.js
 ^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign url script-request-body ihr360.js
+^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header ihr360.js
 
 
 MITM:www.ihr360.com
 
 定时任务：
 25 8 * * * ihr360.js, tag=i人事, enabled=true
+35 17 * * * ihr360.js, tag=i人事, enabled=true
 */
 
 
@@ -20,7 +21,7 @@ $.log("i人事脚本开始执行...");
 try {
     if (typeof $request != "undefined") {
         $.log("开始获取Cookie/Body");
-        if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition?isApp=true") > -1) {
+        if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             getCookie($request);
         }
         if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
