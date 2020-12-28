@@ -19,22 +19,41 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 $.log("i人事脚本开始执行...");
 try {
     if (typeof $request != "undefined") {
-        $.log("开始获取Cookie");
+        $.log("开始获取Cookie/Body");
         if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition?isApp=true") > -1) {
-            var udid = $request.headers["udid"];
-            var irenshilocale = $request.headers["irenshilocale"];
-            var userId = $request.headers["userId"];
-            var appVersion=$request.headers["appVersion"];
-            var os= $request.headers["os"];
-            var ver= $request.headers["ver"];
-            var userAgent=$request.headers["User-Agent"];
-            var appKey=$request.headers["appKey"];
-            var staffId= $request.headers["staffId"];
-            var companyId= $request.headers["companyId"];
-            var osVersion=$request.headers["osVersion"];
-            var cookie=$request.headers["Cookie"];
-            if (cookie) {
-                let model = {
+            getCookie().then(()=>$.done()).catch(()=>$.done());
+        }
+        if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
+           getBody().then(()=>$.done()).catch(()=>$.done());
+        }
+    }
+    else {
+        $.log("开始请求打卡");
+        doSign(options).then(()=>$.done()).catch(()=>$.done());
+    }
+} catch (e) {
+    $.log(e);
+    $.notify("i人事", "代码发生异常", e, { "media-url": img });
+    $.done();
+}
+
+//获取Cookie
+function getCookie(){
+    return new Promise((resolve, reject)=>{
+        let udid = $request.headers["udid"];
+        let irenshilocale = $request.headers["irenshilocale"];
+        let userId = $request.headers["userId"];
+        let appVersion=$request.headers["appVersion"];
+        let os= $request.headers["os"];
+        let ver= $request.headers["ver"];
+        let userAgent=$request.headers["User-Agent"];
+        let appKey=$request.headers["appKey"];
+        let staffId= $request.headers["staffId"];
+        let companyId= $request.headers["companyId"];
+        let osVersion=$request.headers["osVersion"];
+        let cookie=$request.headers["Cookie"];
+        if (cookie) {
+            let model = {
                     udid: udid,
                     irenshilocale: irenshilocale,
                     userId: userId,
@@ -47,49 +66,54 @@ try {
                     companyId: companyId,
                     cookie: cookie,
                     osVersion: osVersion
-                }
-                let data=JSON.stringify(model);
-                $.write(data, cookieName);
-                $.log("获取Cookie：\n"+data);
-                $.notify("i人事", "获取Cookie成功", data, { "media-url": img });
             }
-            else {
-                $.notify("i人事", "获取Cookie失败", "", { "media-url": img });
-            }
-        }
-        if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
-            let body=JSON.parse($request.body);
-            let model={
-                wifiName=body.wifiName,
-                longitude=body.longitude,
-                locationName=body.locationName,
-                wifiMac=body.wifiMac,
-                latitude=body.latitude,
-                signSource=body.signSource,
-                phoneName=body.phoneName,
-                deviceToken=body.deviceToken
-            };
             let data=JSON.stringify(model);
-            $.write(data,bodyName);
-            $.log('获取打卡body：\n'+data);
-            $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
+            $.write(data, cookieName);
+            $.log("获取Cookie：\n"+data);
+            $.notify("i人事", "获取Cookie成功", data, { "media-url": img });
         }
-        $.done();
-    }
-    else {
-        $.log("开始请求打卡");
+        else {
+            $.notify("i人事", "获取Cookie失败", "", { "media-url": img });
+        }
+    });
+}
+
+//获取Body
+function getBody(){
+    return new Promise((resolve, reject) => {
+        let body=JSON.parse($request.body);
+        let model={
+            wifiName=body.wifiName,
+            longitude=body.longitude,
+            locationName=body.locationName,
+            wifiMac=body.wifiMac,
+            latitude=body.latitude,
+            signSource=body.signSource,
+            phoneName=body.phoneName,
+            deviceToken=body.deviceToken
+        };
+        let data=JSON.stringify(model);
+        $.write(data,bodyName);
+        $.log('获取打卡body：\n'+data);
+        $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
+    });
+}
+
+//打开处理
+function doSign(options){
+    return new Promise((resolve, reject)=>{
         let cookie = $.read(cookieName);
         let body=$.read(bodyName);
         if (!cookie) {
             $.log("Cookie不存在，请先获取Cookie");
             $.notify("i人事", "打卡失败", "Cookie不存在，请先获取Cookie", { "media-url": img });
-            $.done();
+            resolve();
             return;
         }
         if(!body){
             $.log("打卡Body不存在，请先手动打卡一次");
             $.notify("i人事", "打卡失败", "打卡Body不存在，请先手动打卡一次", { "media-url": img });
-            $.done();
+            resolve();
             return;
         }
         let model = JSON.parse(cookie);
@@ -123,16 +147,6 @@ try {
             timeout:60000
         };
         $.log("发送请求:\n" + JSON.stringify(options));
-        doSign(options).then(()=>$.done()).catch(()=>$.done());
-    }
-} catch (e) {
-    $.log(e);
-    $.notify("i人事", "代码发生异常", e, { "media-url": img });
-    $.done();
-}
-
-function doSign(options){
-    return new Promise((resolve, reject)=>{
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response));
             var body = JSON.parse(response.body);
@@ -148,9 +162,10 @@ function doSign(options){
             $.log(e);
             reject();
         });
-    })
+    });
 }
 
+//时间戳转换为日期格式
 function formatDate(ts) {
     var date=new Date(ts+8*3600*1000);
     return date.toJSON().substr(0,19).replace('T',' ');
