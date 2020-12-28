@@ -24,21 +24,7 @@ try {
             getCookie($request);
         }
         if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
-            var bodyInfo = JSON.parse($request.body);
-            var model = {
-                wifiName=bodyInfo.wifiName,
-                longitude=bodyInfo.longitude,
-                locationName=bodyInfo.locationName,
-                wifiMac=bodyInfo.wifiMac,
-                latitude=bodyInfo.latitude,
-                signSource=bodyInfo.signSource,
-                phoneName=bodyInfo.phoneName,
-                deviceToken=bodyInfo.deviceToken
-            };
-            var data = JSON.stringify(model);
-            $.write(data, bodyName);
-            $.log('获取打卡body：\n' + data);
-            $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
+            getBody($request);
         }
 
         $.done();
@@ -90,6 +76,25 @@ function getCookie(request) {
     else {
         $.notify("i人事", "获取Cookie失败", "", { "media-url": img });
     }
+}
+
+//获取Body
+function getBody(request) {
+    var body = JSON.parse(request.body);
+    var model = {
+        "wifiName":body.wifiName,
+        "longitude":body.longitude,
+        "locationName":body.locationName,
+        "wifiMac":body.wifiMac,
+        "latitude":body.latitude,
+        "signSource":body.signSource,
+        "phoneName":body.phoneName,
+        "deviceToken":body.deviceToken
+    };
+    let data = JSON.stringify(model);
+    $.write(data, bodyName);
+    $.log('获取打卡body：\n' + data);
+    $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
 }
 
 //打开处理
