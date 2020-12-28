@@ -91,7 +91,7 @@ function getBody(request) {
         "phoneName":body.phoneName,
         "deviceToken":body.deviceToken
     };
-    let data = JSON.stringify(model);
+    var data = JSON.stringify(model);
     $.write(data, bodyName);
     $.log('获取打卡body：\n' + data);
     $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
