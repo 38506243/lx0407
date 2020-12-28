@@ -40,6 +40,7 @@ try {
             $.log('获取打卡body：\n' + data);
             $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
         }
+        
         $.done();
     }
     else {
