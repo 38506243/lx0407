@@ -144,8 +144,7 @@ function doSign() {
             url: url,
             method: method,
             headers: headers,
-            body: body,
-            timeout: 60000
+            body: body
         };
         $.log("发送请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) => {
