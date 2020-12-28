@@ -58,10 +58,21 @@ try {
             }
         }
         if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
-            let body=$request.body;
-            $.write(body,bodyName);
-            $.log('获取打卡body：\n'+body);
-            $.notify("i人事", "获取打卡Body成功", body, { "media-url": img });
+            let body=JSON.parse($request.body);
+            let model={
+                wifiName=body.wifiName,
+                longitude=body.longitude,
+                locationName=body.locationName,
+                wifiMac=body.wifiMac,
+                latitude=body.latitude,
+                signSource=body.signSource,
+                phoneName=body.phoneName,
+                deviceToken=body.deviceToken
+            };
+            let data=JSON.stringify(model);
+            $.write(data,bodyName);
+            $.log('获取打卡body：\n'+data);
+            $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
         }
         $.done();
     }
