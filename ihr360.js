@@ -16,15 +16,17 @@ MITM:www.ihr360.com
 const $ = new API('ihr360', true)
 const cookieName = "Cookie_ihr360";
 const bodyName = "Cookie_body";
+const appName="i人事";
 const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
+
 $.log("i人事脚本开始执行...");
 try {
     if (typeof $request != "undefined") {
         $.log("开始获取Cookie/Body");
-        if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             getCookie($request);
         }
-        if ($request.url.indexOf("https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign") > -1) {
+        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign") > -1) {
             getBody($request);
         }
 
@@ -36,7 +38,7 @@ try {
     }
 } catch (e) {
     $.log(e);
-    $.notify("i人事", "代码发生异常", e, { "media-url": img });
+    Notify("代码发生异常",e);
     $.done();
 }
 
@@ -72,10 +74,10 @@ function getCookie(request) {
         var data = JSON.stringify(model);
         $.write(data, cookieName);
         $.log("获取Cookie：\n" + data);
-        $.notify("i人事", "获取Cookie成功", data, { "media-url": img });
+        Notify("获取Cookie成功",data);
     }
     else {
-        $.notify("i人事", "获取Cookie失败", "", { "media-url": img });
+        Notify("获取Cookie失败","");
     }
 }
 
@@ -95,7 +97,7 @@ function getBody(request) {
     var data = JSON.stringify(model);
     $.write(data, bodyName);
     $.log('获取打卡body：\n' + data);
-    $.notify("i人事", "获取打卡Body成功", data, { "media-url": img });
+    Notify("获取打卡Body成功",data);
 }
 
 //打开处理
@@ -105,13 +107,13 @@ function doSign() {
         var body = $.read(bodyName);
         if (!cookie) {
             $.log("Cookie不存在，请先获取Cookie");
-            $.notify("i人事", "打卡失败", "Cookie不存在，请先获取Cookie", { "media-url": img });
+            Notify("打卡失败", "Cookie不存在，请先获取Cookie");
             resolve();
             return;
         }
         if (!body) {
             $.log("打卡Body不存在，请先手动打卡一次");
-            $.notify("i人事", "打卡失败", "打卡Body不存在，请先手动打卡一次", { "media-url": img });
+            Notify("打卡失败","打卡Body不存在，请先手动打卡一次");
             resolve();
             return;
         }
@@ -151,10 +153,10 @@ function doSign() {
             var body = JSON.parse(response.body);
             if (body.result == true || body.result == "true") {
                 var msg = "打卡时间:" + formatDate(body.data);
-                $.notify("i人事", "打卡成功", msg, { "media-url": img });
+                Notify("打卡成功", msg);
             }
             else {
-                $.notify("i人事", "打卡失败", body.errorMessage, { "media-url": img });
+                Notify("打卡失败", body.errorMessage);
             }
             resolve();
         }).catch((e) => {
@@ -168,6 +170,16 @@ function doSign() {
 function formatDate(ts) {
     var date = new Date(ts + 8 * 3600 * 1000);
     return date.toJSON().substr(0, 19).replace('T', ' ');
+}
+
+//消息通知
+function Notify(title, message){
+    if($.isQX){
+        $.notify(appName,title, message, { "media-url": img });
+    }
+    else{
+        $.notify(appName,title, message);
+    }
 }
 
 
