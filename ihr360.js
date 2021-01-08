@@ -1,6 +1,7 @@
 /*
 QX
 重写设置：
+^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign url script-request-body ihr360.js
 ^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign url script-request-body ihr360.js
 ^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header ihr360.js
 
@@ -16,33 +17,42 @@ MITM:www.ihr360.com
 const $ = new API('ihr360', true)
 const cookieName = "Cookie_ihr360";
 const bodyName = "Cookie_body";
-const appName="i人事";
+const faceName = "Cookie_face";
+const appName = "i人事";
 const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
     if (typeof $request != "undefined") {
-        $.log("开始获取Cookie/Body");
+        $.log("开始获取Cookie/Body/Face");
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+            $.log("开始获取登录信息");
             getCookie($request);
         }
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign") > -1) {
+            $.log("开始获取打卡信息");
             getBody($request);
+        }
+        if ($request.url.indexOf("gateway/attendance/api/attendance/sign/faceSign") > -1) {
+            $.log("开始获取人脸信息");
+            getFaceBody($request);
         }
 
         $.done();
     }
     else {
         $.log("开始请求打卡");
-        doSign().then(() => $.done()).catch(() => $.done());
+        faceSign().then(()=>{
+            doSign().then(() => $.done()).catch(() => $.done())
+        }).catch(() => $.done());
     }
 } catch (e) {
     $.log(e);
-    Notify("代码发生异常",e);
+    Notify("代码发生异常", e);
     $.done();
 }
 
-//获取Cookie
+//获取登录信息
 function getCookie(request) {
     var udid = request.headers["udid"];
     var irenshilocale = request.headers["irenshilocale"];
@@ -73,34 +83,46 @@ function getCookie(request) {
         }
         var data = JSON.stringify(model);
         $.write(data, cookieName);
-        $.log("获取Cookie：\n" + data);
-        Notify("获取Cookie成功",data);
+        $.log("获取登录信息：\n" + data);
+        Notify("获取登录信息成功", data);
     }
     else {
-        Notify("获取Cookie失败","");
+        Notify("获取登录信息失败", "");
     }
 }
 
-//获取Body
+//获取打卡信息
 function getBody(request) {
     var body = JSON.parse(request.body);
     var model = {
-        "wifiName":body.wifiName,
-        "longitude":body.longitude,
-        "locationName":body.locationName,
-        "wifiMac":body.wifiMac,
-        "latitude":body.latitude,
-        "signSource":body.signSource,
-        "phoneName":body.phoneName,
-        "deviceToken":body.deviceToken
+        "wifiName": body.wifiName,
+        "longitude": body.longitude,
+        "locationName": body.locationName,
+        "wifiMac": body.wifiMac,
+        "latitude": body.latitude,
+        "signSource": body.signSource,
+        "phoneName": body.phoneName,
+        "deviceToken": body.deviceToken
     };
     var data = JSON.stringify(model);
     $.write(data, bodyName);
     $.log('获取打卡body：\n' + data);
-    Notify("获取打卡Body成功",data);
+    Notify("获取打卡Body成功", data);
 }
 
-//打开处理
+//获取人脸信息
+function getFaceBody(request) {
+    var body = JSON.parse(request.body);
+    var model = {
+        "faceImage": body.faceImage
+    };
+    var data = JSON.stringify(model);
+    $.write(data, faceName);
+    $.log('获取人脸信息成功');
+    Notify("获取人脸信息成功", "");
+}
+
+//打卡处理
 function doSign() {
     return new Promise((resolve, reject) => {
         var cookie = $.read(cookieName);
@@ -113,7 +135,7 @@ function doSign() {
         }
         if (!body) {
             $.log("打卡Body不存在，请先手动打卡一次");
-            Notify("打卡失败","打卡Body不存在，请先手动打卡一次");
+            Notify("打卡失败", "打卡Body不存在，请先手动打卡一次");
             resolve();
             return;
         }
@@ -165,6 +187,75 @@ function doSign() {
     })
 }
 
+//人脸打卡处理
+function faceSign() {
+    return new Promise((resolve, reject) => {
+        var cookie = $.read(cookieName);
+        var faceBody = $.read(faceName);
+        if (!cookie) {
+            $.log("登录信息不存在，请先登录");
+            Notify("打卡失败", "登录信息不存在，请先登录");
+            resolve();
+            return;
+        }
+        if (!faceBody) {
+            $.log("人脸信息不存在，请先手动打卡一次");
+            Notify("打卡失败", "人脸信息不存在，请先手动打卡一次");
+            resolve();
+            return;
+        }
+        var model = JSON.parse(cookie);
+        var url = 'https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign';
+        var method = 'POST';
+        var headers = {
+            'Host': 'www.ihr360.com',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json; charset=utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Cookie': model.cookie,
+            'Connection': 'keep-alive',
+            'User-Agent': model.userAgent,
+            'Accept-Language': 'zh-Hans-CN;q=1, zh-Hant-CN;q=0.9, en-CN;q=0.8',
+            'udid': model.udid,
+            'irenshilocale': model.irenshilocale,
+            'userId': model.userId,
+            'appVersion': model.appVersion,
+            'os': model.os,
+            'ver': model.ver,
+            'staffId': model.staffId,
+            'appKey': model.appKey,
+            'companyId': model.companyId,
+            'osVersion': model.osVersion
+        };
+        var options = {
+            url: url,
+            method: method,
+            headers: headers,
+            body: faceBody
+        };
+        $.log("发送请求:\n" + JSON.stringify(headers));
+        $.http.post(options).then((response) => {
+            $.log("返回信息:\n" + JSON.stringify(response));
+            var body = JSON.parse(response.body);
+            if (body.result == true || body.result == "true") {
+                if (body.data.result == true || body.data.result == "true") {
+                    if (body.data.errorCode == 0 || body.data.errorCode == "0") {
+                        var msg = "人脸识别度:" + body.data.score;
+                        Notify("人脸打卡成功", msg);
+                    }
+                }
+            }
+            else {
+                Notify("人脸打卡失败", body.errorMessage);
+            }
+            resolve();
+        }).catch((e) => {
+            $.log(e);
+            reject();
+        });
+    })
+}
+
 //时间戳转换为日期格式
 function formatDate(ts) {
     var date = new Date(ts + 8 * 3600 * 1000);
@@ -172,12 +263,12 @@ function formatDate(ts) {
 }
 
 //消息通知
-function Notify(title, message){
-    if($.isQX){
-        $.notify(appName,title, message, { "media-url": img });
+function Notify(title, message) {
+    if ($.isQX) {
+        $.notify(appName, title, message, { "media-url": img });
     }
-    else{
-        $.notify(appName,title, message);
+    else {
+        $.notify(appName, title, message);
     }
 }
 
