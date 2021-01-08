@@ -11,8 +11,8 @@ Version:1.0.0
 MITM:www.ihr360.com
 
 定时任务：
-25 8 * * * ihr360.js, tag=i人事, enabled=true
-35 17 * * * ihr360.js, tag=i人事, enabled=true
+25 8 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407.js
+45 17 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407.js
 */
 
 
