@@ -17,16 +17,16 @@ MITM:www.ihr360.com
 
 
 const $ = new API('ihr360', true)
-const cookieName = "Cookie_ihr360";
-const bodyName = "Cookie_body";
-const faceName = "Cookie_face";
+const cookieLogin = "Cookie_login";
+const cookieSign = "Cookie_sign";
+const cookieFace = "Cookie_face";
 const appName = "i人事";
 const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
     if (typeof $request != "undefined") {
-        $.log("开始获取Cookie/Body/Face");
+        $.log("开始获取必要信息");
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             getCookie($request);
         }
@@ -82,7 +82,7 @@ function getCookie(request) {
             osVersion: osVersion
         }
         var data = JSON.stringify(model);
-        $.write(data, cookieName);
+        $.write(data, cookieLogin);
         $.log("获取登录信息成功：\n" + data);
         Notify("获取登录信息成功", data);
     }
@@ -106,7 +106,7 @@ function getBody(request) {
         "deviceToken": body.deviceToken
     };
     var data = JSON.stringify(model);
-    $.write(data, bodyName);
+    $.write(data, cookieSign);
     $.log('获取打卡信息成功：\n' + data);
     Notify("获取打卡信息成功", data);
 }
@@ -119,7 +119,7 @@ function getFaceBody(request) {
         "faceImage": body.faceImage
     };
     var data = JSON.stringify(model);
-    $.write(data, faceName);
+    $.write(data, cookieFace);
     $.log('获取人脸信息成功');
     Notify("获取人脸信息成功", "");
 }
@@ -128,15 +128,15 @@ function getFaceBody(request) {
 function faceSign() {
     return new Promise((resolve, reject) => {
         $.log("开始人脸识别");
-        var cookie = $.read(cookieName);
-        var faceBody = $.read(faceName);
+        var cookie = $.read(cookieLogin);
+        var body = $.read(cookieFace);
         if (!cookie) {
             $.log("登录信息不存在，请先登录");
             Notify("人脸识别失败", "登录信息不存在，请先登录");
             resolve();
             return;
         }
-        if (!faceBody) {
+        if (!body) {
             $.log("人脸信息不存在，请先手动打卡一次");
             Notify("人脸识别失败", "人脸信息不存在，请先手动打卡一次");
             resolve();
@@ -169,7 +169,7 @@ function faceSign() {
             url: url,
             method: method,
             headers: headers,
-            body: faceBody
+            body: body
         };
         $.log("发送人脸识别请求:\n" + JSON.stringify(headers));
         $.http.post(options).then((response) => {
@@ -198,8 +198,8 @@ function faceSign() {
 function doSign() {
     return new Promise((resolve, reject) => {
         $.log("开始打卡");
-        var cookie = $.read(cookieName);
-        var body = $.read(bodyName);
+        var cookie = $.read(cookieLogin);
+        var body = $.read(cookieSign);
         if (!cookie) {
             $.log("登录信息不存在，请先登录");
             Notify("打卡失败", "登录信息不存在，请先登录");
