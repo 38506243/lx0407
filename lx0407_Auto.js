@@ -272,11 +272,12 @@ function IsNeedSign(){
             'date':GetCurrentDate()
         };
         var headers={
-            'Content-Type': "application/json"
+            'Accept': 'application/json; charset=utf-8',
         };
         var options = {
             url: url,
-            method: method
+            method: method,
+            headers: headers,
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) =>{
