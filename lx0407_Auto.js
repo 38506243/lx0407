@@ -281,13 +281,13 @@ function IsNeedSign(){
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) =>{
             $.log(JSON.stringify(response.body));
-            if(response.body.code === 200&&response.body.newslist[0].isnotwork==1){
+            if(response.body.code == 200&&response.body.newslist[0].isnotwork==1){
                 $.log("今天是非工作日，无需打卡哦");
                 reject();
             }
-            reject();
+            resolve();
         }).catch((e) => {
-            reject();
+            resolve();
         });
     });
 }
