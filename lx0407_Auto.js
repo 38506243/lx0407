@@ -45,7 +45,7 @@ try {
             faceSign().then(()=>{
                 doSign().then(() => $.done()).catch(() => $.done())
             }).catch(() => $.done());
-        });
+        }).catch(() => $.done());
     }
 } catch (e) {
     $.log(e);
@@ -265,8 +265,8 @@ function doSign() {
 ///是否需要打开(判断是否是工作日)
 function IsNeedSign(){
     return new Promise((resolve, reject) => {
-        var url="http://api.tianapi.com/jiejiari/index";
-        var method = 'POST';
+        var url="http://api.tianapi.com/jiejiari/index?key=7691db4011f55da2263a4d3e0075f28b&date="+GetCurrentDate();
+        var method = 'GET';
         var body={
             'key':"7691db4011f55da2263a4d3e0075f28b",
             'date':GetCurrentDate()
@@ -276,9 +276,7 @@ function IsNeedSign(){
         };
         var options = {
             url: url,
-            method: method,
-            headers: headers,
-            body: body
+            method: method
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) =>{
