@@ -283,8 +283,10 @@ function IsNeedSign() {
                 $.log("今天是非工作日，无需打卡哦");
                 reject();
             }
+            $.log("今天是工作日，开始打卡");
             resolve();
         }).catch((e) => {
+            $.log("请求工作日发生异常："+e);
             resolve();
         });
     });
