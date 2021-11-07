@@ -271,7 +271,7 @@ function IsNeedSign(){
             'date':GetCurrentDate()
         };
         var headers={
-            'Content-Type': "application/x-www-form-urlencoded"
+            'Content-Type': "application/json"
         };
         var options = {
             url: url,
@@ -281,14 +281,14 @@ function IsNeedSign(){
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) =>{
-            $.log(JSON.stringify(response));
-            if(response.code === 200&&response.newslist[0].isnotwork==1){
+            $.log(JSON.stringify(response.body));
+            if(response.body.code === 200&&response.body.newslist[0].isnotwork==1){
                 $.log("今天是非工作日，无需打卡哦");
                 reject();
             }
             resolve();
         }).catch((e) => {
-            resolve();
+            reject();
         });
     });
 }
