@@ -41,8 +41,8 @@ try {
     }
     else {
         $.log("开始请求打卡");
-        IsNeedSign().then(()=>{ 
-            faceSign().then(()=>{
+        IsNeedSign().then(() => {
+            faceSign().then(() => {
                 doSign().then(() => $.done()).catch(() => $.done())
             }).catch(() => $.done());
         }).catch(() => $.done());
@@ -263,15 +263,15 @@ function doSign() {
 }
 
 ///是否需要打开(判断是否是工作日)
-function IsNeedSign(){
+function IsNeedSign() {
     return new Promise((resolve, reject) => {
-        var url="http://api.tianapi.com/jiejiari/index?key=7691db4011f55da2263a4d3e0075f28b&date="+GetCurrentDate();
+        var url = "http://api.tianapi.com/jiejiari/index?key=7691db4011f55da2263a4d3e0075f28b&date=" + GetCurrentDate();
         var method = 'GET';
-        var body={
-            'key':"7691db4011f55da2263a4d3e0075f28b",
-            'date':GetCurrentDate()
+        var body = {
+            'key': "7691db4011f55da2263a4d3e0075f28b",
+            'date': GetCurrentDate()
         };
-        var headers={
+        var headers = {
             'Accept': 'application/json; charset=utf-8',
         };
         var options = {
@@ -280,15 +280,12 @@ function IsNeedSign(){
             headers: headers,
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
-        $.http.post(options).then((response) =>{
+        $.http.post(options).then((response) => {
             $.log(JSON.stringify(response.body));
             var data = JSON.parse(response.body);
-            if(data.code == 200){
-                $.log("工作日返回成功");
-                if(data.newslist[0].isnotwork==1){ 
-                    $.log("今天是非工作日，无需打卡哦");
-                    reject();
-                }
+            if (data.code == 200 && data.newslist[0].isnotwork == 1) {
+                $.log("今天是非工作日，无需打卡哦");
+                reject();
             }
             resolve();
         }).catch((e) => {
@@ -304,12 +301,12 @@ function formatDate(ts) {
 }
 
 //获取当前日期
-function GetCurrentDate(){
+function GetCurrentDate() {
     var now = new Date();
-    var year = now.getFullYear();    
-    var month = now.getMonth() + 1; 
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1;
     var day = now.getDate();
-    return year + '-' + month +'-' + day;
+    return year + '-' + month + '-' + day;
 }
 
 //消息通知
