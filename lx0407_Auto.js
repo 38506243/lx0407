@@ -41,13 +41,11 @@ try {
     }
     else {
         $.log("开始请求打卡");
-        if(!IsNeedSign()){ 
-            $.log("今天是非工作日，无需打卡哦");
-            return;
-        }
-        faceSign().then(()=>{
-            doSign().then(() => $.done()).catch(() => $.done())
-        }).catch(() => $.done());
+        IsNeedSign().then(()=>{ 
+            faceSign().then(()=>{
+                doSign().then(() => $.done()).catch(() => $.done())
+            }).catch(() => $.done());
+        });
     }
 } catch (e) {
     $.log(e);
@@ -285,14 +283,12 @@ function IsNeedSign(){
         $.http.post(options).then((response) =>{
             $.log(JSON.stringify(response));
             if(response.code === 200&&response.newslist[0].isnotwork==1){
-                resolve();
-                return false;
+                $.log("今天是非工作日，无需打卡哦");
+                reject();
             }
             resolve();
-            return true;
         }).catch((e) => {
             resolve();
-            return true;
         });
     });
 }
