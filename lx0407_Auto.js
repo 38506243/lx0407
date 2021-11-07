@@ -267,17 +267,13 @@ function IsNeedSign() {
     return new Promise((resolve, reject) => {
         var url = "http://api.tianapi.com/jiejiari/index?key=7691db4011f55da2263a4d3e0075f28b&date=" + GetCurrentDate();
         var method = 'GET';
-        var body = {
-            'key': "7691db4011f55da2263a4d3e0075f28b",
-            'date': GetCurrentDate()
-        };
         var headers = {
             'Accept': 'application/json; charset=utf-8',
         };
         var options = {
             url: url,
             method: method,
-            headers: headers,
+            headers: headers
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) => {
