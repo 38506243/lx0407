@@ -266,6 +266,7 @@ function doSign() {
 function IsNeedSign(){
     return new Promise((resolve, reject) => {
         var url="http://api.tianapi.com/jiejiari/index";
+        var method = 'POST';
         var body={
             'key':"7691db4011f55da2263a4d3e0075f28b",
             'date':GetCurrentDate()
@@ -275,7 +276,7 @@ function IsNeedSign(){
         };
         var options = {
             url: url,
-            method: "POST",
+            method: method,
             headers: headers,
             body: body
         };
@@ -286,7 +287,7 @@ function IsNeedSign(){
                 $.log("今天是非工作日，无需打卡哦");
                 reject();
             }
-            resolve();
+            reject();
         }).catch((e) => {
             reject();
         });
