@@ -43,7 +43,7 @@ try {
         IsNeedSign().then(() => {
             faceSign().then(() => {
                 doSign().then(() =>{ 
-                    $.log("打开成功，好好上班，爱你呦~")
+                    $.log("打卡成功，好好上班，爱你呦~")
                     $.done();}).catch(() => $.done())
             }).catch(() => $.done());
         }).catch(() => $.done());
