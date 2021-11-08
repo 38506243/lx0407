@@ -16,7 +16,7 @@ MITM:www.ihr360.com
 */
 
 
-const $ = new API('ihr360_Auto', true)
+const $ = new API('ihr360', true)
 const cookieLogin = "Cookie_login";
 const cookieSign = "Cookie_sign";
 const cookieFace = "Cookie_face";
@@ -36,14 +36,15 @@ try {
         if ($request.url.indexOf("gateway/attendance/api/attendance/sign/faceSign") > -1) {
             getFaceBody($request);
         }
-
         $.done();
     }
     else {
         $.log("开始请求打卡");
         IsNeedSign().then(() => {
             faceSign().then(() => {
-                doSign().then(() => $.done()).catch(() => $.done())
+                doSign().then(() =>{ 
+                    $.log("打开成功，好好上班，爱你呦~")
+                    $.done();}).catch(() => $.done())
             }).catch(() => $.done());
         }).catch(() => $.done());
     }
@@ -181,17 +182,19 @@ function faceSign() {
                 if (body.data.result == true || body.data.result == "true") {
                     if (body.data.errorCode == 0 || body.data.errorCode == "0") {
                         var msg = "人脸识别度:" + body.data.score;
+                        $.log("人脸识别成功,"+msg);
                         Notify("人脸识别成功", msg);
                     }
                 }
             }
             else {
+                $.log("人脸识别失败:\n", body.errorMessage)
                 Notify("人脸识别失败", body.errorMessage);
             }
             resolve();
         }).catch((e) => {
             $.log(e);
-            reject();
+            resolve();
         });
     })
 }
@@ -205,13 +208,13 @@ function doSign() {
         if (!cookie) {
             $.log("登录信息不存在，请先登录");
             Notify("打卡失败", "登录信息不存在，请先登录");
-            resolve();
+            reject();
             return;
         }
         if (!body) {
             $.log("打卡信息不存在，请先手动打卡一次");
             Notify("打卡失败", "打卡信息不存在，请先手动打卡一次");
-            resolve();
+            reject();
             return;
         }
         var model = JSON.parse(cookie);
@@ -249,12 +252,15 @@ function doSign() {
             var body = JSON.parse(response.body);
             if (body.result == true || body.result == "true") {
                 var msg = "打卡时间:" + formatDate(body.data);
+                $.log("打卡成功:\n"+msg);
                 Notify("打卡成功", msg);
+                resolve();
             }
             else {
+                $.log("打卡失败:\n"+body.errorMessage);
                 Notify("打卡失败", body.errorMessage);
+                reject();
             }
-            resolve();
         }).catch((e) => {
             $.log(e);
             reject();
@@ -277,11 +283,12 @@ function IsNeedSign() {
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) => {
-            $.log(JSON.stringify(response.body));
+            $.log("返回信息:\n"+JSON.stringify(response.body));
             var data = JSON.parse(response.body);
             if (data.code == 200 && data.newslist[0].isnotwork == 1) {
                 $.log("今天是非工作日，无需打卡哦");
                 reject();
+                return;
             }
             $.log("今天是工作日，开始打卡");
             resolve();
