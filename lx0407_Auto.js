@@ -253,7 +253,7 @@ function doSign() {
             if (body.result == true || body.result == "true") {
                 var msg = "打卡时间:" + formatDate(body.data);
                 $.log("打卡成功:\n"+msg);
-                Notify("打卡成功", msg);
+                Notify("打卡成功，好好上班，爱你呦~", msg);
                 resolve();
             }
             else {
