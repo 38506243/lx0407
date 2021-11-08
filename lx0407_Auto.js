@@ -1,18 +1,18 @@
 /*
 i人事
-Version:1.0.0
+Version:2.0.0
 
 重写设置：
-^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign url script-request-body ihr360.js
-^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign url script-request-body ihr360.js
-^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header ihr360.js
+^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign url script-request-body https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Auto.js
+^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign url script-request-body https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Auto.js
+^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Auto.js
 
 
 MITM:www.ihr360.com
 
 定时任务：
 25 8 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Auto.js
-45 17 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Auto.js
+35 17 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Auto.js
 */
 
 
