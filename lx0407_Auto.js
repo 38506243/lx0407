@@ -250,7 +250,7 @@ function doSign() {
             var body = JSON.parse(response.body);
             if (body.result == true || body.result == "true") {
                 var msg = "打卡时间:" + formatDate(body.data);
-                $.log("打卡成功:\n" + msg);
+                $.log(msg);
                 var hours = new Date().getHours();
                 if (hours <= 11) {
                     $.log("打卡成功，好好上班，爱你呦~");
