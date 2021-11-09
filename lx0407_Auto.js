@@ -42,9 +42,7 @@ try {
         $.log("开始请求打卡");
         IsNeedSign().then(() => {
             faceSign().then(() => {
-                doSign().then(() =>{ 
-                    $.log("打卡成功，好好上班，爱你呦~")
-                    $.done();}).catch(() => $.done())
+                doSign().then(() => $.done()).catch(() => $.done())
             }).catch(() => $.done());
         }).catch(() => $.done());
     }
@@ -182,7 +180,7 @@ function faceSign() {
                 if (body.data.result == true || body.data.result == "true") {
                     if (body.data.errorCode == 0 || body.data.errorCode == "0") {
                         var msg = "人脸识别度:" + body.data.score;
-                        $.log("人脸识别成功,"+msg);
+                        $.log("人脸识别成功," + msg);
                         Notify("人脸识别成功", msg);
                     }
                 }
@@ -252,12 +250,20 @@ function doSign() {
             var body = JSON.parse(response.body);
             if (body.result == true || body.result == "true") {
                 var msg = "打卡时间:" + formatDate(body.data);
-                $.log("打卡成功:\n"+msg);
-                Notify("打卡成功，好好上班，爱你呦~", msg);
+                $.log("打卡成功:\n" + msg);
+                var hours = new Date().getHours();
+                if (hours <= 11) {
+                    $.log("打卡成功，好好上班，爱你呦~");
+                    Notify("打卡成功，好好上班，爱你呦~", msg);
+                }
+                else {
+                    $.log("打卡成功，下班啦，好好休息~");
+                    Notify("打卡成功，下班啦，好好休息~", msg);
+                }
                 resolve();
             }
             else {
-                $.log("打卡失败:\n"+body.errorMessage);
+                $.log("打卡失败:\n" + body.errorMessage);
                 Notify("打卡失败", body.errorMessage);
                 reject();
             }
@@ -283,7 +289,7 @@ function IsNeedSign() {
         };
         $.log("发送工作日请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) => {
-            $.log("返回信息:\n"+JSON.stringify(response.body));
+            $.log("返回信息:\n" + JSON.stringify(response.body));
             var data = JSON.parse(response.body);
             if (data.code == 200 && data.newslist[0].isnotwork == 1) {
                 $.log("今天是非工作日，无需打卡哦");
@@ -293,7 +299,7 @@ function IsNeedSign() {
             $.log("今天是工作日，开始打卡");
             resolve();
         }).catch((e) => {
-            $.log("请求工作日发生异常："+e);
+            $.log("请求工作日发生异常：" + e);
             resolve();
         });
     });
