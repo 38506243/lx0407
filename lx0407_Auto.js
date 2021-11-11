@@ -253,12 +253,12 @@ function doSign() {
                 $.log(msg);
                 var hours = new Date().getHours();
                 if (hours <= 11) {
-                    $.log("打卡成功，好好上班，爱你呦~");
-                    Notify("打卡成功，好好上班，爱你呦~", msg);
+                    $.log("打卡成功，好好上班");
+                    Notify("打卡成功", msg);
                 }
                 else {
-                    $.log("打卡成功，下班啦，好好休息~");
-                    Notify("打卡成功，下班啦，好好休息~", msg);
+                    $.log("打卡成功，下班愉快");
+                    Notify("打卡成功", msg);
                 }
                 resolve();
             }
