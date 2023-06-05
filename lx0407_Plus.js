@@ -340,9 +340,9 @@ function IsSigned() {
                     if (signLenth == 0) {
                         resolve();
                     } else {
+                        Notify("您已打过卡了","打卡时间:"+formatDate(body.data.signTimes[0]));
                         reject();
                     }
-                    return;
                 }
 
                 if (flag == "pm" ) {
@@ -350,9 +350,9 @@ function IsSigned() {
                         resolve();
                     }
                     else {
+                        Notify("您已打过卡了","打卡时间:"+formatDate(body.data.signTimes[signLenth-1]));
                         reject();
                     }
-                    return;
                 }
             } else {
                 $.log("检查失败:\n" + body.errorMessage);
