@@ -39,7 +39,8 @@ try {
         $.done();
     } else {
         $.log("开始请求打卡");
-        IsNeedSign.then(()=>IsSigned().then(()=>faceSign().then(()=>doSign().then(()=>$.done()))));
+        IsNeedSign().then(IsSigned).then(faceSign).then(doSign).then(()=>$.done());
+        //IsNeedSign().then(()=>IsSigned().then(()=>faceSign().then(()=>doSign().then(()=>$.done()))));
     }
 } catch (e) {
     $.log(e);
