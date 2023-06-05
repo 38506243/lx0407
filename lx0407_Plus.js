@@ -335,7 +335,7 @@ function IsSigned() {
             $.log("返回信息:\n" + JSON.stringify(response));
             let body = JSON.parse(response.body);
             if (body.result == true || body.result == "true") {
-                let signLenth = length(body.data.signTimes);
+                let signLenth = body.data.signTimes.length;
                 let flag = GetAMorPM();
                 if (flag == "am") {
                     if (signLenth == 0) {
