@@ -341,7 +341,7 @@ function IsSigned() {
                     if (signLenth == 0) {
                         resolve();
                     } else {
-                        Notify("您已打过卡了","打卡时间:"+formatDate(body.data.signTimes[0]));
+                        Notify("您已经打过卡了","打卡时间:"+formatDate(body.data.signTimes[0]));
                         reject();
                     }
                 }
@@ -351,7 +351,7 @@ function IsSigned() {
                         resolve();
                     }
                     else {
-                        Notify("您已打过卡了","打卡时间:"+formatDate(body.data.signTimes[signLenth-1]));
+                        Notify("您已经打过卡了","打卡时间:"+formatDate(body.data.signTimes[signLenth-1]));
                         reject();
                     }
                 }
