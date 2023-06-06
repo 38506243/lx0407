@@ -39,7 +39,7 @@ try {
         $.done();
     } else {
         $.log("开始请求打卡");
-        IsNeedSign().then(IsSigned).then(faceSign).then(doSign).then(()=>$.done());
+        IsNeedSign().then(IsSigned).then(faceSign).then(doSign).then(()=>$.done()).catch(()=>$.done());
         //IsNeedSign().then(()=>IsSigned().then(()=>faceSign().then(()=>doSign().then(()=>$.done()))));
     }
 } catch (e) {
@@ -358,11 +358,11 @@ function IsSigned() {
             } else {
                 $.log("检查失败:\n" + body.errorMessage);
                 Notify("检查是否已打卡失败", body.errorMessage);
-                reject();
+                resolve();
             }
         }).catch((e) => {
             $.log(e);
-            reject();
+            resolve();
         });
     });
 }
