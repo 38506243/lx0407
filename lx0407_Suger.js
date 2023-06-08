@@ -52,15 +52,15 @@ function getCookie(request) {
     $.log("开始获取登录信息");
     var udid = request.headers["udid"];
     var irenshilocale = request.headers["irenshilocale"];
-    var userId = request.headers["userId"];
-    var appVersion = request.headers["appVersion"];
+    var userId = request.headers["userid"];
+    var appVersion = request.headers["appversion"];
     var os = request.headers["os"];
     var ver = request.headers["ver"];
-    var userAgent = request.headers["User-Agent"];
-    var appKey = request.headers["appKey"];
-    var staffId = request.headers["staffId"];
-    var companyId = request.headers["companyId"];
-    var osVersion = request.headers["osVersion"];
+    var userAgent = request.headers["user-agent"];
+    var appKey = request.headers["appkey"];
+    var staffId = request.headers["staffid"];
+    var companyId = request.headers["companyid"];
+    var osVersion = request.headers["osversion"];
     var cookie = request.headers["cookie"];
     if (cookie) {
         var model = {
