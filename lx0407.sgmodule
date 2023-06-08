@@ -3,11 +3,11 @@
 #!system=ios
 
 [Script]
-登录信息 = type=http-request,requires-body=0,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Suger.js
-人脸信息 = type=http-request,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Suger.js
-打卡信息 = type=http-request,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Suger.js
-自动打卡Plus(上午) = type=cron,requires-body=0,timeout=10,pattern=25 8 * * *,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Suger.js
-自动打卡Plus(下午) = type=cron,requires-body=0,timeout=10,pattern=35 17 * * *,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Suger.js
+登录信息 = type=http-request,requires-body=0,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+人脸信息 = type=http-request,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+打卡信息 = type=http-request,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+自动打卡Plus(上午) = type=cron,requires-body=0,timeout=10,pattern=25 8 * * *,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+自动打卡Plus(下午) = type=cron,requires-body=0,timeout=10,pattern=35 17 * * *,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
 
 [MITM]
 hostname = %APPEND% www.ihr360.com
