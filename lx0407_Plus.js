@@ -30,6 +30,7 @@ try {
             let body=JSON.parse($response.body);
             body.data.isAnyWhere=true;
             body.data.conditions[0].locations[0].radius=100*1000;
+            body.data.conditions[0].locations[0].locationName=body.data.conditions[0].locations[0].locationName+"|AnyWhere";
             $.log("AnyWhere已开启:\n"+JSON.stringify(body));
             Notify("AnyWhere已开启","");
             $.done({body:JSON.stringify(body)});
