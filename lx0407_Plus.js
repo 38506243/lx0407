@@ -28,7 +28,7 @@ try {
     if(typeof $response!="undefined"){
         let body=JSON.parse($response.body);
         body.data.isAnyWhere=true;
-        Notify("AnyWhere已开启");
+        Notify("AnyWhere已开启\n"+body);
         $.done({body:JSON.stringify(body)});
     }
     else if (typeof $request != "undefined") {
