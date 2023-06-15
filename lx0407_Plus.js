@@ -28,6 +28,7 @@ try {
     if(typeof $response!="undefined"){
         let body=JSON.parse($response.body);
         body.data.isAnyWhere=true;
+        body.data.conditions[0].locations[0].radius=100*1000;
         $.log(JSON.stringify(body));
         Notify("AnyWhere已开启");
         $.done({body:JSON.stringify(body)});
