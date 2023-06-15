@@ -38,7 +38,7 @@ try {
 
     if ($request && $request.headers) {
         $.log("开始获取必要信息");
-        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+        if ($request.url.indexOf("gateway/check_login") > -1) {
             getCookie($request);
         }
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign") > -1) {
