@@ -26,7 +26,7 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 $.log("i人事脚本开始执行...");
 try {
     if( $response && $response.body){
-        if ($response.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             let body=JSON.parse($response.body);
             body.data.isAnyWhere=true;
             body.data.conditions[0].locations[0].radius=100*1000;
