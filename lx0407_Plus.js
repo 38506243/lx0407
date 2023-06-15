@@ -41,7 +41,7 @@ try {
     else if(typeof $response!="undefined"){
         var body=JSON.parse($response.body);
         body.data.isAnyWhere=true;
-        $.log("AnyWhere已开启");
+        Notify("AnyWhere已开启");
         $.done({body:body});
     }
     else {
