@@ -25,7 +25,13 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
-    if (typeof $request != "undefined") {
+    if(typeof $response!="undefined"){
+        let body=JSON.parse($response.body);
+        body.data.isAnyWhere=true;
+        Notify("AnyWhere已开启");
+        $.done({body:JSON.stringify(body)});
+    }
+    else if (typeof $request != "undefined") {
         $.log("开始获取必要信息");
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             getCookie($request);
@@ -37,12 +43,6 @@ try {
             getFaceBody($request);
         }
         $.done();
-    }
-    else if(typeof $response!="undefined"){
-        var body=JSON.parse($response.body);
-        body.data.isAnyWhere=true;
-        Notify("AnyWhere已开启");
-        $.done({body:body});
     }
     else {
         $.log("开始请求打卡");
