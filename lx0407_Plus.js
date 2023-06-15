@@ -37,7 +37,14 @@ try {
             getFaceBody($request);
         }
         $.done();
-    } else {
+    }
+    else if(typeof $response!="undefined"){
+        var body=JSON.parse($response.body);
+        body.data.isAnyWhere=true;
+        $.log("AnyWhere已开启");
+        $.done({body:body});
+    }
+    else {
         $.log("开始请求打卡");
         IsNeedSign().then(IsSigned).then(faceSign).then(doSign).then(()=>$.done()).catch(()=>$.done());
     }
