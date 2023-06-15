@@ -25,15 +25,15 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
-    if(typeof $response!="undefined"&&$response.body){
+    if( $response && $response.body){
         let body=JSON.parse($response.body);
         body.data.isAnyWhere=true;
         body.data.conditions[0].locations[0].radius=100*1000;
-        $.log(JSON.stringify(body));
-        Notify("AnyWhere已开启");
+        $.log("AnyWhere已开启:\n"+JSON.stringify(body));
+        Notify("AnyWhere已开启","");
         $.done({body:JSON.stringify(body)});
     }
-    else if (typeof $request != "undefined" && $request.headers) {
+    else if ($request && $request.headers) {
         $.log("开始获取必要信息");
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             getCookie($request);
