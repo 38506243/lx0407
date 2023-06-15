@@ -1,18 +1,7 @@
 /*
 i人事
-Version:3.0.0
+Version:3.1.0
 
-重写设置：
-^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign url script-request-body https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Plus.js
-^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign url script-request-body https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Plus.js
-^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Plus.js
-
-
-MITM:www.ihr360.com
-
-定时任务：
-25 8 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Plus.js
-35 17 * * * https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Plus.js
 */
 
 
@@ -25,19 +14,7 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
-    if( $response && $response.body){
-        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
-            let body=JSON.parse($response.body);
-            body.data.isAnyWhere=true;
-            body.data.conditions[0].locations[0].radius=100*1000;
-            body.data.conditions[0].locations[0].locationName=body.data.conditions[0].locations[0].locationName+"|AnyWhere";
-            $.log("AnyWhere已开启:\n"+JSON.stringify(body));
-            Notify("AnyWhere已开启","");
-            $.done({body:JSON.stringify(body)});
-        }
-    }
-
-    if ($request && $request.headers) {
+    if ($request) {
         $.log("开始获取必要信息");
         if ($request.url.indexOf("gateway/check_login") > -1) {
             getCookie($request);
@@ -48,6 +25,17 @@ try {
         if ($request.url.indexOf("gateway/attendance/api/attendance/sign/faceSign") > -1) {
             getFaceBody($request);
         }
+
+        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+            let body=JSON.parse($response.body);
+            body.data.isAnyWhere=true;
+            body.data.conditions[0].locations[0].radius=100*1000;
+            body.data.conditions[0].locations[0].locationName=body.data.conditions[0].locations[0].locationName+"|AnyWhere";
+            $.log("AnyWhere已开启:\n"+JSON.stringify(body));
+            Notify("AnyWhere已开启","");
+            $.done({body:JSON.stringify(body)});
+        }
+
         $.done();
     }
     else {
