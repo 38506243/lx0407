@@ -29,10 +29,10 @@ try {
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             let body=JSON.parse($response.body);
             body.data.isAnyWhere=true;
-            body.data.conditions[0].locations[0].radius=100*1000;
-            body.data.conditions[0].locations[0].locationName=body.data.conditions[0].locations[0].locationName+"|AnyWhere";
+            body.data.conditions[0].locations[0].radius=1000*1000;
+            body.data.conditions[0].locations[0].locationName="🇨🇳"+ body.data.conditions[0].locations[0].locationName;
             $.log("AnyWhere已开启:\n"+JSON.stringify(body));
-            Notify("AnyWhere已开启","");
+            //Notify("AnyWhere已开启","");
             $.done({body:JSON.stringify(body)});
         }
 
@@ -81,7 +81,7 @@ function getCookie(request) {
         var data = JSON.stringify(model);
         $.write(data, cookieLogin);
         $.log("获取登录信息成功：\n" + data);
-        Notify("获取登录信息成功", data);
+        //Notify("获取登录信息成功", data);
     } else {
         Notify("获取登录信息失败", "");
     }
@@ -104,7 +104,7 @@ function getBody(request) {
     var data = JSON.stringify(model);
     $.write(data, cookieSign);
     $.log('获取打卡信息成功：\n' + data);
-    Notify("获取打卡信息成功", data);
+    //Notify("获取打卡信息成功", data);
 }
 
 //获取人脸信息
@@ -117,7 +117,7 @@ function getFaceBody(request) {
     var data = JSON.stringify(model);
     $.write(data, cookieFace);
     $.log('获取人脸信息成功');
-    Notify("获取人脸信息成功", "");
+    //Notify("获取人脸信息成功", "");
 }
 
 //人脸打卡处理
