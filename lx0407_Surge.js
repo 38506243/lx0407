@@ -25,9 +25,9 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
-    if (typeof $request != "undefined") {
+    if ($request) {
         $.log("开始获取必要信息");
-        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+        if ($request.url.indexOf("gateway/check_login") > -1) {
             getCookie($request);
         }
         if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign") > -1) {
@@ -36,6 +36,17 @@ try {
         if ($request.url.indexOf("gateway/attendance/api/attendance/sign/faceSign") > -1) {
             getFaceBody($request);
         }
+
+        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+            let body=JSON.parse($response.body);
+            body.data.isAnyWhere=true;
+            body.data.conditions[0].locations[0].radius=1000*1000;
+            body.data.conditions[0].locations[0].locationName +="🇨🇳";
+            $.log("AnyWhere已开启:\n"+JSON.stringify(body));
+            //Notify("AnyWhere已开启","");
+            $.done({body:JSON.stringify(body)});
+        }
+
         $.done();
     } else {
         $.log("开始请求打卡");
@@ -80,7 +91,7 @@ function getCookie(request) {
         var data = JSON.stringify(model);
         $.write(data, cookieLogin);
         $.log("获取登录信息成功：\n" + data);
-        Notify("获取登录信息成功", data);
+        //Notify("获取登录信息成功", data);
     } else {
         Notify("获取登录信息失败", "");
     }
@@ -103,7 +114,7 @@ function getBody(request) {
     var data = JSON.stringify(model);
     $.write(data, cookieSign);
     $.log('获取打卡信息成功：\n' + data);
-    Notify("获取打卡信息成功", data);
+    //Notify("获取打卡信息成功", data);
 }
 
 //获取人脸信息
@@ -116,7 +127,7 @@ function getFaceBody(request) {
     var data = JSON.stringify(model);
     $.write(data, cookieFace);
     $.log('获取人脸信息成功');
-    Notify("获取人脸信息成功", "");
+    //Notify("获取人脸信息成功", "");
 }
 
 //人脸打卡处理
