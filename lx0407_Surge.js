@@ -25,7 +25,7 @@ const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
 $.log("i人事脚本开始执行...");
 try {
-    if ($request) {
+    if (typeof $request !="undefined") {
         $.log("开始获取必要信息");
         if ($request.url.indexOf("gateway/check_login") > -1) {
             getCookie($request);
