@@ -19,25 +19,39 @@ MITM:www.ihr360.com
 const $ = new API('ihr360', true)
 const cookieLogin = "Cookie_login";
 const cookieSign = "Cookie_sign";
+const cookieSignDecode = "Cookie_sign_decode";
 const cookieFace = "Cookie_face";
+const cookieSignType="Cookie_sign_type";
 const appName = "i人事";
 const img = "https://raw.githubusercontent.com/Orz-3/task/master/jrtt.png";
 
+let signType=$.read(cookieSignType);
+if(typeof signType =="undefined"){
+    $.write(0, cookieSignType);
+}
+
 $.log("i人事脚本开始执行...");
+
 try {
     if (typeof $request !="undefined") {
         $.log("开始获取必要信息");
         if ($request.url.indexOf("gateway/check_login") > -1) {
             getCookie($request);
+            $.done();
         }
-        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign") > -1) {
+        else if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign/decode") > -1) {
+            getBodyDecode($request);
+            $.done();
+        }
+        else if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/doSign") > -1) {
             getBody($request);
+            $.done();
         }
-        if ($request.url.indexOf("gateway/attendance/api/attendance/sign/faceSign") > -1) {
+        else if ($request.url.indexOf("gateway/attendance/api/attendance/sign/faceSign") > -1) {
             getFaceBody($request);
+            $.done();
         }
-
-        if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
+        else if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             let body=JSON.parse($response.body);
             body.data.isAnyWhere=true;
             body.data.conditions[0].locations[0].radius=1000*1000;
@@ -46,11 +60,15 @@ try {
             //Notify("AnyWhere已开启","");
             $.done({body:JSON.stringify(body)});
         }
-
-        $.done();
     } else {
         $.log("开始请求打卡");
-        IsNeedSign().then(IsSigned).then(faceSign).then(doSign).then(()=>$.done()).catch(()=>$.done());
+        let signType=$.read(cookieSignType);
+        if(signType===1){
+            IsNeedSign().then(IsSigned).then(doSignDecode).then(()=>$.done()).catch(()=>$.done());
+        }
+        else{
+            IsNeedSign().then(IsSigned).then(faceSign).then(doSign).then(()=>$.done()).catch(()=>$.done());
+        }
     }
 } catch (e) {
     $.log(e);
@@ -95,6 +113,19 @@ function getCookie(request) {
     } else {
         Notify("获取登录信息失败", "");
     }
+}
+
+//获取打卡信息
+function getBodyDecode(request) {
+    $.log("开始获取打卡信息Decode");
+    var body = JSON.parse(request.body);
+    var model = {
+        "aesReq": body.aesReq
+    };
+    var data = JSON.stringify(model);
+    $.write(data, cookieSignDecode);
+    $.log('获取打卡信息成功：\n' + data);
+    //Notify("获取打卡信息成功", data);
 }
 
 //获取打卡信息
@@ -249,6 +280,80 @@ function doSign() {
             body: body
         };
         $.log("发送打卡请求:\n" + JSON.stringify(options));
+        $.http.post(options).then((response) => {
+            $.log("返回信息:\n" + JSON.stringify(response));
+            var body = JSON.parse(response.body);
+            if (body.result == true || body.result == "true") {
+                var msg = "打卡时间:" + formatDate(body.data);
+                $.log(msg);
+                var hours = new Date().getHours();
+                if (hours <= 11) {
+                    $.log("打卡成功，好好上班");
+                    Notify("打卡成功", msg);
+                } else {
+                    $.log("打卡成功，下班愉快");
+                    Notify("打卡成功", msg);
+                }
+                resolve();
+            } else {
+                $.log("打卡失败:\n" + body.errorMessage);
+                Notify("打卡失败", body.errorMessage);
+                reject();
+            }
+        }).catch((e) => {
+            $.log(e);
+            reject();
+        });
+    })
+}
+
+function doSignDecode() {
+    return new Promise((resolve, reject) => {
+        $.log("开始打卡Decode");
+        var cookie = $.read(cookieLogin);
+        var body = $.read(cookieSignDecode);
+        if (!cookie) {
+            $.log("登录信息不存在，请先登录");
+            Notify("打卡失败", "登录信息不存在，请先登录");
+            reject();
+            return;
+        }
+        if (!body) {
+            $.log("打卡信息Decode不存在，请先手动打卡一次");
+            Notify("打卡失败", "打卡信息Decode不存在，请先手动打卡一次");
+            reject();
+            return;
+        }
+        var model = JSON.parse(cookie);
+        var url = 'https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign/decode';
+        var method = 'POST';
+        var headers = {
+            'Host': 'www.ihr360.com',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json; charset=utf-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Cookie': model.cookie,
+            'Connection': 'keep-alive',
+            'User-Agent': model.userAgent,
+            'Accept-Language': 'zh-Hans-CN;q=1, zh-Hant-CN;q=0.9, en-CN;q=0.8',
+            'udid': model.udid,
+            'irenshilocale': model.irenshilocale,
+            'userId': model.userId,
+            'appVersion': model.appVersion,
+            'os': model.os,
+            'ver': model.ver,
+            'staffId': model.staffId,
+            'appKey': model.appKey,
+            'companyId': model.companyId,
+            'osVersion': model.osVersion
+        };
+        var options = {
+            url: url,
+            method: method,
+            headers: headers,
+            body: body
+        };
+        $.log("发送打卡Decode请求:\n" + JSON.stringify(options));
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response));
             var body = JSON.parse(response.body);
