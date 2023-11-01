@@ -2,5 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/51lq" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Quantumult-X" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/alipan" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/hx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/zhihu" vcs="Git" />
   </component>
 </project>

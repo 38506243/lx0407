@@ -212,14 +212,10 @@ function faceSign() {
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response));
             var body = JSON.parse(response.body);
-            if (body.result == true || body.result == "true") {
-                if (body.data.result == true || body.data.result == "true") {
-                    if (body.data.errorCode == 0 || body.data.errorCode == "0") {
-                        var msg = "人脸识别度:" + body.data.score;
-                        $.log("人脸识别成功," + msg);
-                        Notify("人脸识别成功", msg);
-                    }
-                }
+            if (body.result === true && body.data.result === true && body.data.errorCode === 0) {
+                var msg = "人脸识别度:" + body.data.score;
+                $.log("人脸识别成功," + msg);
+                Notify("人脸识别成功", msg);
             } else {
                 $.log("人脸识别失败:\n", body.errorMessage)
                 Notify("人脸识别失败", body.errorMessage);
@@ -283,7 +279,7 @@ function doSign() {
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response));
             var body = JSON.parse(response.body);
-            if (body.result == true || body.result == "true") {
+            if (body.result === true && body.errorMessage === "") {
                 var msg = "打卡时间:" + formatDate(body.data);
                 $.log(msg);
                 var hours = new Date().getHours();
@@ -357,7 +353,7 @@ function doSignDecode() {
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response));
             var body = JSON.parse(response.body);
-            if (body.result == true || body.result == "true") {
+            if (body.result === true && body.errorMessage==="") {
                 var msg = "打卡时间:" + formatDate(body.data);
                 $.log(msg);
                 var hours = new Date().getHours();
