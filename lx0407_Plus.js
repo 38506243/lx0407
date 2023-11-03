@@ -242,7 +242,7 @@ function doSign() {
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response));
             var body = JSON.parse(response.body);
-            if (body.result == true || body.result == "true") {
+            if (body.result === true && body.errorMessage === "") {
                 var msg = "打卡时间:" + formatDate(body.data);
                 $.log(msg);
                 var hours = new Date().getHours();
