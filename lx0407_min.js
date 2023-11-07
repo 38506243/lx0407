@@ -5,7 +5,7 @@ Version:4.0.0
 
 [rewrite_local]
 ^https://www.ihr360.com/gateway/check_login url script-request-header https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_min.js
-^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-request-header https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_min.js
+^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition url script-response-body https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_min.js
 
 [mitm]
 hostname=www.ihr360.com
