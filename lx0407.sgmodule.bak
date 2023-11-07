@@ -1,0 +1,13 @@
+#!name=i人事自动打卡For Surge
+#!desc=定时自动打卡，智能跳过节假日，防重复打卡，AnyWhere功能
+#!system=ios
+
+[Script]
+登录信息 = type=http-request,requires-body=0,timeout=10,pattern=^https://www.ihr360.com/gateway/check_login,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+人脸信息 = type=http-request,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/api/attendance/sign/faceSign,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+打卡信息 = type=http-request,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/doSign,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+AnyWhere = type=http-response,requires-body=1,timeout=10,pattern=^https://www.ihr360.com/gateway/attendance/sign/attendanceSign/getCondition,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js
+自动打卡Plus(上午) = type=cron,cronexp=25 8 * * *,wake-system=1,timeout=10,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js,script-update-interval=604800
+自动打卡Plus(下午) = type=cron,cronexp=35 17 * * *,wake-system=1,timeout=10,script-path=https://raw.githubusercontent.com/38506243/lx0407/main/lx0407_Surge.js,script-update-interval=604800
+[MITM]
+hostname = %APPEND% www.ihr360.com
