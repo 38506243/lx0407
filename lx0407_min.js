@@ -55,74 +55,48 @@ try {
 function getCookie(request) {
     $.log("开始获取登录信息");
     $.log(JSON.stringify(request.headers));
-    if($.isSurge){
-        let udid = request.headers["udid"];
-        let irenshilocale = request.headers["irenshilocale"];
-        let userId = request.headers["userid"];
-        let appVersion = request.headers["appversion"];
-        let os = request.headers["os"];
-        let ver = request.headers["ver"];
-        let userAgent = request.headers["user-agent"];
-        let appKey = request.headers["appkey"];
-        let staffId = request.headers["staffid"];
-        let companyId = request.headers["companyid"];
-        let osVersion = request.headers["osversion"];
-        let cookie = request.headers["cookie"];
-        if (cookie) {
+    if($.isQX){
+        if (request.headers["Cookie"]) {
             let model = {
-                udid: udid,
-                irenshilocale: irenshilocale,
-                userId: userId,
-                appVersion: appVersion,
-                os: os,
-                ver: ver,
-                userAgent: userAgent,
-                appKey: appKey,
-                staffId: staffId,
-                companyId: companyId,
-                cookie: cookie,
-                osVersion: osVersion
+                udid: request.headers["udid"],
+                irenshilocale: request.headers["irenshilocale"],
+                userId: request.headers["userId"],
+                appVersion: request.headers["appVersion"],
+                os: request.headers["os"],
+                ver: request.headers["ver"],
+                userAgent: request.headers["User-Agent"],
+                appKey: request.headers["appKey"],
+                staffId: request.headers["staffId"],
+                companyId: request.headers["companyId"],
+                cookie: request.headers["Cookie"],
+                osVersion: request.headers["osVersion"]
             }
             let data = JSON.stringify(model);
             $.write(data, cookieLogin);
             $.log("获取登录信息成功：\n" + data);
-            //Notify("获取登录信息成功", data);
         } else {
             Notify("获取登录信息失败", "");
         }
     }
     else{
-        let udid = request.headers["udid"];
-        let irenshilocale = request.headers["irenshilocale"];
-        let userId = request.headers["userId"];
-        let appVersion = request.headers["appVersion"];
-        let os = request.headers["os"];
-        let ver = request.headers["ver"];
-        let userAgent = request.headers["User-Agent"];
-        let appKey = request.headers["appKey"];
-        let staffId = request.headers["staffId"];
-        let companyId = request.headers["companyId"];
-        let osVersion = request.headers["osVersion"];
-        let cookie = request.headers["Cookie"];
-        if (cookie) {
+        if (request.headers["cookie"]) {
             let model = {
-                udid: udid,
-                irenshilocale: irenshilocale,
-                userId: userId,
-                appVersion: appVersion,
-                os: os,
-                ver: ver,
-                userAgent: userAgent,
-                appKey: appKey,
-                staffId: staffId,
-                companyId: companyId,
-                cookie: cookie,
-                osVersion: osVersion
+                udid: request.headers["udid"],
+                irenshilocale: request.headers["irenshilocale"],
+                userId: request.headers["userid"],
+                appVersion: request.headers["appversion"],
+                os: request.headers["os"],
+                ver: request.headers["ver"],
+                userAgent: request.headers["user-agent"],
+                appKey: request.headers["appkey"],
+                staffId: request.headers["staffid"],
+                companyId: request.headers["companyid"],
+                cookie: request.headers["cookie"],
+                osVersion: request.headers["osversion"]
             }
             let data = JSON.stringify(model);
             $.write(data, cookieLogin);
             $.log("获取登录信息成功：\n" + data);
-            //Notify("获取登录信息成功", data);
         } else {
             Notify("获取登录信息失败", "");
         }
