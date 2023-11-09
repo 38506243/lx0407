@@ -54,39 +54,77 @@ try {
 //获取登录信息
 function getCookie(request) {
     $.log("开始获取登录信息");
-    var udid = request.headers["udid"];
-    var irenshilocale = request.headers["irenshilocale"];
-    var userId = request.headers["userid"];
-    var appVersion = request.headers["appversion"];
-    var os = request.headers["os"];
-    var ver = request.headers["ver"];
-    var userAgent = request.headers["user-agent"];
-    var appKey = request.headers["appkey"];
-    var staffId = request.headers["staffid"];
-    var companyId = request.headers["companyid"];
-    var osVersion = request.headers["osversion"];
-    var cookie = request.headers["cookie"];
-    if (cookie) {
-        var model = {
-            udid: udid,
-            irenshilocale: irenshilocale,
-            userId: userId,
-            appVersion: appVersion,
-            os: os,
-            ver: ver,
-            userAgent: userAgent,
-            appKey: appKey,
-            staffId: staffId,
-            companyId: companyId,
-            cookie: cookie,
-            osVersion: osVersion
+    if($.isSurge){
+        let udid = request.headers["udid"];
+        let irenshilocale = request.headers["irenshilocale"];
+        let userId = request.headers["userid"];
+        let appVersion = request.headers["appversion"];
+        let os = request.headers["os"];
+        let ver = request.headers["ver"];
+        let userAgent = request.headers["user-agent"];
+        let appKey = request.headers["appkey"];
+        let staffId = request.headers["staffid"];
+        let companyId = request.headers["companyid"];
+        let osVersion = request.headers["osversion"];
+        let cookie = request.headers["cookie"];
+        if (cookie) {
+            let model = {
+                udid: udid,
+                irenshilocale: irenshilocale,
+                userId: userId,
+                appVersion: appVersion,
+                os: os,
+                ver: ver,
+                userAgent: userAgent,
+                appKey: appKey,
+                staffId: staffId,
+                companyId: companyId,
+                cookie: cookie,
+                osVersion: osVersion
+            }
+            let data = JSON.stringify(model);
+            $.write(data, cookieLogin);
+            $.log("获取登录信息成功：\n" + data);
+            //Notify("获取登录信息成功", data);
+        } else {
+            Notify("获取登录信息失败", "");
         }
-        var data = JSON.stringify(model);
-        $.write(data, cookieLogin);
-        $.log("获取登录信息成功：\n" + data);
-        //Notify("获取登录信息成功", data);
-    } else {
-        Notify("获取登录信息失败", "");
+    }
+    else{
+        let udid = request.headers["udid"];
+        let irenshilocale = request.headers["irenshilocale"];
+        let userId = request.headers["userId"];
+        let appVersion = request.headers["appVersion"];
+        let os = request.headers["os"];
+        let ver = request.headers["ver"];
+        let userAgent = request.headers["User-Agent"];
+        let appKey = request.headers["appKey"];
+        let staffId = request.headers["staffId"];
+        let companyId = request.headers["companyId"];
+        let osVersion = request.headers["osVersion"];
+        let cookie = request.headers["Cookie"];
+        if (cookie) {
+            let model = {
+                udid: udid,
+                irenshilocale: irenshilocale,
+                userId: userId,
+                appVersion: appVersion,
+                os: os,
+                ver: ver,
+                userAgent: userAgent,
+                appKey: appKey,
+                staffId: staffId,
+                companyId: companyId,
+                cookie: cookie,
+                osVersion: osVersion
+            }
+            let data = JSON.stringify(model);
+            $.write(data, cookieLogin);
+            $.log("获取登录信息成功：\n" + data);
+            //Notify("获取登录信息成功", data);
+        } else {
+            Notify("获取登录信息失败", "");
+        }
     }
 }
 
