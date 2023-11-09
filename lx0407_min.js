@@ -54,6 +54,7 @@ try {
 //获取登录信息
 function getCookie(request) {
     $.log("开始获取登录信息");
+    $.log(JSON.stringify(request.headers));
     if($.isSurge){
         let udid = request.headers["udid"];
         let irenshilocale = request.headers["irenshilocale"];
