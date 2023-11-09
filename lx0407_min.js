@@ -55,51 +55,46 @@ try {
 function getCookie(request) {
     $.log("开始获取登录信息");
     $.log(JSON.stringify(request.headers));
-    if($.isQX){
-        if (request.headers["Cookie"]) {
-            let model = {
-                udid: request.headers["udid"],
-                irenshilocale: request.headers["irenshilocale"],
-                userId: request.headers["userId"],
-                appVersion: request.headers["appVersion"],
-                os: request.headers["os"],
-                ver: request.headers["ver"],
-                userAgent: request.headers["User-Agent"],
-                appKey: request.headers["appKey"],
-                staffId: request.headers["staffId"],
-                companyId: request.headers["companyId"],
-                cookie: request.headers["Cookie"],
-                osVersion: request.headers["osVersion"]
-            }
-            let data = JSON.stringify(model);
-            $.write(data, cookieLogin);
-            $.log("获取登录信息成功：\n" + data);
-        } else {
-            Notify("获取登录信息失败", "");
+    if (request.headers["Cookie"]) {
+        let model = {
+            udid: request.headers["udid"],
+            irenshilocale: request.headers["irenshilocale"],
+            userId: request.headers["userId"],
+            appVersion: request.headers["appVersion"],
+            os: request.headers["os"],
+            ver: request.headers["ver"],
+            userAgent: request.headers["User-Agent"],
+            appKey: request.headers["appKey"],
+            staffId: request.headers["staffId"],
+            companyId: request.headers["companyId"],
+            cookie: request.headers["Cookie"],
+            osVersion: request.headers["osVersion"]
         }
+        let data = JSON.stringify(model);
+        $.write(data, cookieLogin);
+        $.log("获取登录信息成功：\n" + data);
     }
-    else{
-        if (request.headers["cookie"]) {
-            let model = {
-                udid: request.headers["udid"],
-                irenshilocale: request.headers["irenshilocale"],
-                userId: request.headers["userid"],
-                appVersion: request.headers["appversion"],
-                os: request.headers["os"],
-                ver: request.headers["ver"],
-                userAgent: request.headers["user-agent"],
-                appKey: request.headers["appkey"],
-                staffId: request.headers["staffid"],
-                companyId: request.headers["companyid"],
-                cookie: request.headers["cookie"],
-                osVersion: request.headers["osversion"]
-            }
-            let data = JSON.stringify(model);
-            $.write(data, cookieLogin);
-            $.log("获取登录信息成功：\n" + data);
-        } else {
-            Notify("获取登录信息失败", "");
+    else if (request.headers["cookie"]) {
+        let model = {
+            udid: request.headers["udid"],
+            irenshilocale: request.headers["irenshilocale"],
+            userId: request.headers["userid"],
+            appVersion: request.headers["appversion"],
+            os: request.headers["os"],
+            ver: request.headers["ver"],
+            userAgent: request.headers["user-agent"],
+            appKey: request.headers["appkey"],
+            staffId: request.headers["staffid"],
+            companyId: request.headers["companyid"],
+            cookie: request.headers["cookie"],
+            osVersion: request.headers["osversion"]
         }
+        let data = JSON.stringify(model);
+        $.write(data, cookieLogin);
+        $.log("获取登录信息成功：\n" + data);
+    }
+    else {
+        Notify("获取登录信息失败", "");
     }
 }
 
