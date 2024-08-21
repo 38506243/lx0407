@@ -35,8 +35,18 @@ try {
         else if ($request.url.indexOf("gateway/attendance/sign/attendanceSign/getCondition") > -1) {
             let body=JSON.parse($response.body);
             body.data.isAnyWhere=true;
-            body.data.conditions[0].locations[0].radius=1000*1000;
-            body.data.conditions[0].locations[0].locationName +="🇨🇳";
+            body.data.conditions[0].signType="EITHER";
+            let locations=[]
+            locations.push({
+                "longitude": 120.646185,
+                "latitude": 31.277734,
+                "gdLongitude": 120.63965059899014,
+                "gdLatitude": 31.271912658481966,
+                "radius": 1000000,
+                "locationName": "江苏省苏州市吴中区迎春路226号🇨🇳",
+                "id": null
+            });
+            body.data.conditions[0].locations=locations;
             $.log("AnyWhere已开启:\n"+JSON.stringify(body));
             //Notify("AnyWhere已开启","");
             $.done({body:JSON.stringify(body)});
@@ -101,7 +111,7 @@ function getCookie(request) {
 ///是否需要打开(判断是否是工作日)
 function IsNeedSign() {
     return new Promise((resolve, reject) => {
-        var url = "http://api.tianapi.com/jiejiari/index?key=7691db4011f55da2263a4d3e0075f28b&date=" + GetCurrentDate();
+        var url = "https://apis.tianapi.com/jiejiari/index?key=7691db4011f55da2263a4d3e0075f28b&date=" + GetCurrentDate();
         var method = 'GET';
         var headers = {
             'Accept': 'application/json; charset=utf-8',

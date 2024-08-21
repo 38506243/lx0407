@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../项目源代码/吴中资产管理系统/WZ_ASSET/ZRAdmin-Vue/.idea/ZRAdmin-Vue.iml" filepath="$PROJECT_DIR$/../项目源代码/吴中资产管理系统/WZ_ASSET/ZRAdmin-Vue/.idea/ZRAdmin-Vue.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/脚本开发.iml" filepath="$PROJECT_DIR$/.idea/脚本开发.iml" />
     </modules>
   </component>
