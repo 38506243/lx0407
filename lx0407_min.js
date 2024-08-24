@@ -125,7 +125,7 @@ function IsNeedSign() {
         $.http.post(options).then((response) => {
             $.log("返回信息:\n" + JSON.stringify(response.body));
             var data = JSON.parse(response.body);
-            if (data.code == 200 && data.newslist[0].isnotwork == 1) {
+            if (data.code === 200 && data.result.list[0].isnotwork === 1) {
                 $.log("今天是非工作日，无需打卡哦");
                 reject();
                 return;
